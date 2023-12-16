@@ -1,8 +1,9 @@
 using Godot;
 
-namespace GodotStudy.VisualShader.Tutorial2;
+namespace GodotStudy.VisualShader.Tutorial3;
 
-public partial class Tutorial2 : Control
+[Tool]
+public partial class Tutorial3 : Control
 {
 	private HSlider _hSlider;
 	private Sprite2D _sprite2D;
@@ -19,6 +20,6 @@ public partial class Tutorial2 : Control
 	{
 		var material = _sprite2D.Material as ShaderMaterial;
 		
-		material!.SetShaderParameter("Alpha", value);
+		material!.SetShaderParameter("Speed", value);
 	}
 }

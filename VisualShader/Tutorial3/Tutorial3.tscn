@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://uwaq76xrgk4y"]
+
+[ext_resource type="Script" path="res://VisualShader/Tutorial3/Tutorial3.cs" id="1_k16vp"]
+[ext_resource type="Shader" uid="uid://cmaewlii4ew5f" path="res://VisualShader/Tutorial3/Tutorial3.tres" id="2_j3hf6"]
+[ext_resource type="Texture2D" uid="uid://x3k12agv5phk" path="res://icon.svg" id="3_xdtuj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_84mcf"]
+shader = ExtResource("2_j3hf6")
+shader_parameter/Speed = 0.1
+
+[node name="Tutorial3" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_k16vp")
+
+[node name="HSlider" type="HSlider" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 339.0
+offset_top = 183.0
+offset_right = 798.0
+offset_bottom = 235.0
+min_value = -2.0
+max_value = 2.0
+step = 0.1
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+texture_repeat = 2
+material = SubResource("ShaderMaterial_84mcf")
+position = Vector2(568, 332)
+texture = ExtResource("3_xdtuj")

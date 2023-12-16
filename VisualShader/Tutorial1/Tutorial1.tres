@@ -25,9 +25,10 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-845.03, -158.303)
 mode = 1
 flags/light_only = false
-nodes/fragment/0/position = Vector2(30, 210)
+nodes/fragment/0/position = Vector2(-20, 220)
 nodes/fragment/2/node = SubResource("VisualShaderNodeFloatParameter_rh4ix")
 nodes/fragment/2/position = Vector2(-480, 240)
 nodes/fragment/connections = PackedInt32Array(2, 0, 0, 1)

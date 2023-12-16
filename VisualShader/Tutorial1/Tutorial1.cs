@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Godot4_2Study.VisualShader.Tutorial1;
+namespace GodotStudy.VisualShader.Tutorial1;
 
 public partial class Tutorial1 : Control
 {
