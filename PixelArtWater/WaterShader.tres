@@ -1,0 +1,73 @@
+[gd_resource type="VisualShader" load_steps=4 format=3 uid="uid://bcucdjjhubk54"]
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_6ig0q"]
+output_port_for_preview = 0
+expanded_output_ports = [0]
+source = 2
+
+[sub_resource type="VisualShaderNodeVaryingSetter" id="VisualShaderNodeVaryingSetter_4guvi"]
+varying_name = "world_pos"
+varying_type = 3
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_8ylt3"]
+size = Vector2(680, 320)
+expression = "world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0, 1.0)).xy;"
+
+[resource]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+
+// Varyings
+varying vec2 world_pos;
+
+
+
+
+void vertex() {
+	vec2 n_out3p0;
+// Expression:3
+	n_out3p0 = vec2(0.0, 0.0);
+	{
+		n_out3p0 = (MODEL_MATRIX * vec4(VERTEX, 1.0, 1.0)).xy;
+	}
+
+
+// VaryingSetter:2
+	world_pos = n_out3p0;
+
+
+}
+
+void fragment() {
+	vec4 n_out2p0;
+// Texture2D:2
+	n_out2p0 = texture(TEXTURE, UV);
+	float n_out2p1 = n_out2p0.r;
+
+
+// Output:0
+	COLOR.rgb = vec3(n_out2p0.xyz);
+	COLOR.a = n_out2p1;
+
+
+}
+"
+graph_offset = Vector2(-154.846, 193.482)
+mode = 1
+flags/light_only = false
+varyings/world_pos = "0,3"
+nodes/vertex/0/position = Vector2(1600, 500)
+nodes/vertex/2/node = SubResource("VisualShaderNodeVaryingSetter_4guvi")
+nodes/vertex/2/position = Vector2(1100, 460)
+nodes/vertex/3/node = SubResource("VisualShaderNodeExpression_8ylt3")
+nodes/vertex/3/position = Vector2(360, 420)
+nodes/vertex/3/size = Vector2(680, 320)
+nodes/vertex/3/input_ports = ""
+nodes/vertex/3/output_ports = "0,3,world_pos;"
+nodes/vertex/3/expression = "world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0, 1.0)).xy;"
+nodes/vertex/connections = PackedInt32Array(3, 0, 2, 0)
+nodes/fragment/0/position = Vector2(1060, 840)
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_6ig0q")
+nodes/fragment/2/position = Vector2(640, 800)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 2, 1, 0, 1)

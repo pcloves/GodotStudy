@@ -16,10 +16,17 @@ run/main_scene="res://VisualShader/Tutorial1/Tutorial1.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/scale=2.0
+
 [dotnet]
 
 project/assembly_name="GodotStudy"
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
+textures/canvas_textures/default_texture_repeat=1
 textures/vram_compression/import_etc2_astc=true

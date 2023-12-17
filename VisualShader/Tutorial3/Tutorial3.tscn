@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://VisualShader/Tutorial3/Tutorial3.cs" id="1_k16vp"]
 [ext_resource type="Shader" uid="uid://cmaewlii4ew5f" path="res://VisualShader/Tutorial3/Tutorial3.tres" id="2_j3hf6"]
-[ext_resource type="Texture2D" uid="uid://x3k12agv5phk" path="res://icon.svg" id="3_xdtuj"]
+[ext_resource type="Texture2D" uid="uid://dbbne0l2hifrs" path="res://icon.png" id="3_wslu0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_84mcf"]
 shader = ExtResource("2_j3hf6")
@@ -32,5 +32,6 @@ step = 0.1
 unique_name_in_owner = true
 texture_repeat = 2
 material = SubResource("ShaderMaterial_84mcf")
-position = Vector2(568, 332)
-texture = ExtResource("3_xdtuj")
+position = Vector2(568, 334)
+scale = Vector2(0.15625, 0.15625)
+texture = ExtResource("3_wslu0")

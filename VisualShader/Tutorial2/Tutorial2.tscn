@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://VisualShader/Tutorial2/Tutorial2.cs" id="1_fyy4g"]
 [ext_resource type="Shader" uid="uid://dj7ysrqcyhg0k" path="res://VisualShader/Tutorial2/Tutorial2.tres" id="2_jo1ns"]
-[ext_resource type="Texture2D" uid="uid://x3k12agv5phk" path="res://icon.svg" id="3_lxecj"]
+[ext_resource type="Texture2D" uid="uid://dbbne0l2hifrs" path="res://icon.png" id="3_y1jyv"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_84mcf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y28i7"]
 shader = ExtResource("2_jo1ns")
 shader_parameter/Alpha = 1.0
 
@@ -30,6 +30,7 @@ value = 1.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_84mcf")
+material = SubResource("ShaderMaterial_y28i7")
 position = Vector2(568, 332)
-texture = ExtResource("3_lxecj")
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("3_y1jyv")

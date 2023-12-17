@@ -6,6 +6,9 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="PixelArtWater\node_2d.tscn" />
+    <Content Include="PixelArtWater\README.md" />
+    <Content Include="PixelArtWater\test.tres" />
     <Content Include="VisualShader\README.md" />
   </ItemGroup>
 </Project>
