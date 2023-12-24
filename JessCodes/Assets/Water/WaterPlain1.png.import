@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dnlxp6ljnsia"
-path="res://.godot/imported/WaterTiles.png-e7c3f2a30ca3c1f12d7c2485386179a6.ctex"
+uid="uid://cjqu63j7rg2hg"
+path="res://.godot/imported/WaterPlain1.png-46f91e161f09159ee661b2cd3dcec096.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://PixelArtWater/Assets/Water/WaterTiles.png"
-dest_files=["res://.godot/imported/WaterTiles.png-e7c3f2a30ca3c1f12d7c2485386179a6.ctex"]
+source_file="res://JessCodes/Assets/Water/WaterPlain1.png"
+dest_files=["res://.godot/imported/WaterPlain1.png-46f91e161f09159ee661b2cd3dcec096.ctex"]
 
 [params]
 

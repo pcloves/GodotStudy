@@ -1,0 +1,90 @@
+[gd_resource type="VisualShader" load_steps=6 format=3 uid="uid://bcucdjjhubk54"]
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_6ig0q"]
+output_port_for_preview = 0
+expanded_output_ports = [0]
+source = 5
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_g4v8s"]
+parameter_name = "HeightMap"
+texture_type = 1
+texture_repeat = 1
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_myvld"]
+input_name = "vertex"
+
+[sub_resource type="VisualShaderNodeVaryingSetter" id="VisualShaderNodeVaryingSetter_4guvi"]
+varying_name = "globalPosition"
+varying_type = 3
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_8ylt3"]
+size = Vector2(1280, 700)
+expression = "globalPosition = (MODEL_MATRIX * vec4(VERTEX, 0.0, 1.0)).xy;"
+
+[resource]
+code = "shader_type canvas_item;
+render_mode blend_mix, skip_vertex_transform, world_vertex_coords;
+
+
+// Varyings
+varying vec2 globalPosition;
+
+uniform sampler2D HeightMap : source_color, repeat_enable;
+
+
+
+void vertex() {
+	vec3 n_out3p0;
+// Expression:3
+	n_out3p0 = vec3(0.0, 0.0, 0.0);
+	{
+		globalPosition = (MODEL_MATRIX * vec4(VERTEX, 0.0, 1.0)).xy;
+	}
+
+
+// VaryingSetter:2
+	globalPosition = vec2(n_out3p0.xy);
+
+
+}
+
+void fragment() {
+// Input:4
+	vec2 n_out4p0 = VERTEX;
+
+
+	vec4 n_out2p0;
+// Texture2D:2
+	n_out2p0 = texture(HeightMap, n_out4p0);
+
+
+// Output:0
+	COLOR.rgb = vec3(n_out2p0.xyz);
+
+
+}
+"
+graph_offset = Vector2(978.993, 283.895)
+mode = 1
+flags/skip_vertex_transform = true
+flags/light_only = false
+flags/world_vertex_coords = true
+varyings/globalPosition = "0,3"
+nodes/vertex/0/position = Vector2(2600, 440)
+nodes/vertex/2/node = SubResource("VisualShaderNodeVaryingSetter_4guvi")
+nodes/vertex/2/position = Vector2(2860, 820)
+nodes/vertex/3/node = SubResource("VisualShaderNodeExpression_8ylt3")
+nodes/vertex/3/position = Vector2(1480, 760)
+nodes/vertex/3/size = Vector2(1280, 700)
+nodes/vertex/3/input_ports = ""
+nodes/vertex/3/output_ports = "0,4,globalPosition1;"
+nodes/vertex/3/expression = "globalPosition = (MODEL_MATRIX * vec4(VERTEX, 0.0, 1.0)).xy;"
+nodes/vertex/connections = PackedInt32Array(3, 0, 2, 0)
+nodes/fragment/0/position = Vector2(580, 1320)
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_6ig0q")
+nodes/fragment/2/position = Vector2(200, 1280)
+nodes/fragment/3/node = SubResource("VisualShaderNodeTexture2DParameter_g4v8s")
+nodes/fragment/3/position = Vector2(-340, 1040)
+nodes/fragment/4/node = SubResource("VisualShaderNodeInput_myvld")
+nodes/fragment/4/position = Vector2(-340, 1580)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 4, 0, 2, 0, 2, 0, 0, 0)

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cbw6iic0yn0gt"
-path="res://.godot/imported/Water_Tiles 2 copy.png-c2d39b525396ef677a93ac62ab2450c1.ctex"
+uid="uid://bkdkseokdir6k"
+path="res://.godot/imported/CausticTexture.png-3132767e522d0c337ebf43e5ef1f977c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://PixelArtWater/Assets/Water/Water_Tiles 2 copy.png"
-dest_files=["res://.godot/imported/Water_Tiles 2 copy.png-c2d39b525396ef677a93ac62ab2450c1.ctex"]
+source_file="res://JessCodes/Assets/Water/CausticTexture.png"
+dest_files=["res://.godot/imported/CausticTexture.png-3132767e522d0c337ebf43e5ef1f977c.ctex"]
 
 [params]
 

@@ -12,14 +12,13 @@ config_version=5
 
 config/name="GodotStudy"
 config/tags=PackedStringArray("study")
-run/main_scene="res://VisualShader/Tutorial1/Tutorial1.tscn"
+run/main_scene="res://JessCodes/SampleScene.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
-[display]
+[autoload]
 
-window/stretch/mode="canvas_items"
-window/stretch/scale=2.0
+Events="*res://Global/Events.cs"
 
 [dotnet]
 
