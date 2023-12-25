@@ -1,0 +1,22 @@
+[gd_scene load_steps=6 format=3 uid="uid://xuj6gnaux047"]
+
+[ext_resource type="Shader" uid="uid://ylfduya4wnmt" path="res://VisualShader/Tutorial4/Tutorial4.tres" id="1_own5p"]
+[ext_resource type="Texture2D" uid="uid://b5w4nwfhe2e62" path="res://VisualShader/Tutorial4/fire.png" id="2_yfowp"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5sq3m"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_muvk4"]
+seamless = true
+noise = SubResource("FastNoiseLite_5sq3m")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0su54"]
+shader = ExtResource("1_own5p")
+shader_parameter/Speed = 0.2
+shader_parameter/Noise = SubResource("NoiseTexture2D_muvk4")
+
+[node name="Tutorial4" type="Node2D"]
+
+[node name="Fire" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_0su54")
+position = Vector2(517, 313)
+texture = ExtResource("2_yfowp")
