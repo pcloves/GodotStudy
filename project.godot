@@ -20,6 +20,10 @@ config/icon="res://icon.svg"
 
 Events="*res://Global/Events.cs"
 
+[display]
+
+window/stretch/mode="canvas_items"
+
 [dotnet]
 
 project/assembly_name="GodotStudy"

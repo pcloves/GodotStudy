@@ -1,0 +1,35 @@
+[gd_scene load_steps=7 format=3 uid="uid://byuaqecc82t0p"]
+
+[ext_resource type="Texture2D" uid="uid://dd4qsd6wtl6p1" path="res://VisualShader/Tutorial6/mirror.jpg" id="1_jf1qs"]
+[ext_resource type="Texture2D" uid="uid://x3k12agv5phk" path="res://icon.svg" id="2_x4fe4"]
+[ext_resource type="Shader" uid="uid://b5fs2u2hs0r76" path="res://VisualShader/Tutorial6/Tutorial6.tres" id="3_lkwrj"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_efy62"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_kslht"]
+seamless = true
+noise = SubResource("FastNoiseLite_efy62")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cy0ri"]
+shader = ExtResource("3_lkwrj")
+shader_parameter/Speed = 0.1
+shader_parameter/Noise = SubResource("NoiseTexture2D_kslht")
+
+[node name="Tutorial6" type="Node2D"]
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(2.5, 7.5)
+scale = Vector2(1.59861, 1.095)
+texture = ExtResource("1_jf1qs")
+
+[node name="Player" type="Sprite2D" parent="."]
+position = Vector2(-58, -16)
+texture = ExtResource("2_x4fe4")
+
+[node name="Miror" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_cy0ri")
+position = Vector2(2.57492e-05, 271.994)
+scale = Vector2(9, -1.24991)
+texture = ExtResource("2_x4fe4")
+
+[node name="Camera2D" type="Camera2D" parent="."]
