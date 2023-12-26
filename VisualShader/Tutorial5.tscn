@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://cmngq4g0y3w7j"]
+
+[ext_resource type="Shader" uid="uid://7lpuf73ji4w5" path="res://VisualShader/Tutorial5/Tutorial5.tres" id="1_rvift"]
+[ext_resource type="Texture2D" uid="uid://x3k12agv5phk" path="res://icon.svg" id="2_otakt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0su54"]
+shader = ExtResource("1_rvift")
+shader_parameter/Speed = -14.181
+
+[node name="Tutorial5" type="Node2D"]
+
+[node name="Fire" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_0su54")
+position = Vector2(741, 659)
+scale = Vector2(10, 10)
+texture = ExtResource("2_otakt")
