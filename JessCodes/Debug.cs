@@ -25,8 +25,8 @@ public partial class Debug : Node2D
     {
         base._Draw();
 
-        var rectPosition = _currentChunkCoord * SampleScene.ChunkSize - new Vector2I(SampleScene.ChunkSize, SampleScene.ChunkSize) * SampleScene.RenderDist;
-        var rectSize = new Vector2I((SampleScene.RenderDist * 2 + 1) * SampleScene.ChunkSize, (SampleScene.RenderDist * 2 + 1) * SampleScene.ChunkSize);
+        var rectPosition = _currentChunkCoord * SampleScene.TileSize - new Vector2I(SampleScene.TileSize, SampleScene.TileSize) * SampleScene.RenderDist;
+        var rectSize = new Vector2I((SampleScene.RenderDist * 2 + 1) * SampleScene.TileSize, (SampleScene.RenderDist * 2 + 1) * SampleScene.TileSize);
         var rect = new Rect2(rectPosition, rectSize);
 
         GD.Print($"rect:{rect}");
