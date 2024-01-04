@@ -451,6 +451,16 @@ zoom = Vector2(0.9, 0.9)
 [node name="Indicator" parent="." instance=ExtResource("7_y8gdm")]
 unique_name_in_owner = true
 
-[node name="Indicator2" type="Sprite2D" parent="."]
+[node name="Origin" type="Sprite2D" parent="."]
 visible = false
 texture = ExtResource("8_ubi8k")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_right = 168.0
+offset_bottom = 75.0
+text = "T: Switch TileMap
+H: Switch HeightMap
+R: Regenerate
+LB: Tile Info"

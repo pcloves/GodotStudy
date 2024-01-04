@@ -2,36 +2,27 @@ using System;
 using System.Globalization;
 using Godot;
 using Godot.Collections;
-using GodotStudy.Global;
 
 namespace GodotStudy.JessCodes;
 
 public partial class SampleScene : Node2D
 {
-    public static readonly int TileSize = 16;
-    public static readonly int RenderDist = 30;
+    public const int TileSize = 16;
+    public const int RenderDist = 20;
 
     [Export] private Vector2I _position = new(0, 0);
 
-    public Vector2I CurrentChunkCoord = GetChunkCoordinate(Vector2I.Zero);
-    public Vector2I LastChunkCoord = GetChunkCoordinate(Vector2I.Zero);
-
-    private FastNoiseLite _height = new();
+    private FastNoiseLite _heightNoise = new();
     private TileMap _tileMap;
+    private Sprite2D _heightMap;
     private Node2D _indicator;
 
-
-    private readonly System.Collections.Generic.Dictionary<Vector2I, Tile> _tileCoordMap = new();
+    private readonly System.Collections.Generic.Dictionary<Vector2I, TileMeta> _tileCoordMap = new();
 
     public override void _Ready()
     {
-        CurrentChunkCoord = GetChunkCoordinate(_position);
-        LastChunkCoord = GetChunkCoordinate(_position);
-
         _tileMap = GetNodeOrNull<TileMap>("%TileMap");
         _indicator = GetNodeOrNull<Node2D>("%Indicator");
-
-        // this.Global<Events>().EmitSignal(Events.SignalName.ChunkChanged, _lastChunkCoord, _currentChunkCoord);
 
         Generate(_position);
     }
@@ -40,45 +31,40 @@ public partial class SampleScene : Node2D
     {
         base._Input(@event);
 
-        if (@event is InputEventMouseButton eventMouseButton)
+        if (@event is InputEventMouseButton { Pressed: true })
         {
-            if (eventMouseButton.Pressed)
-            {
-                var localMousePosition = GetLocalMousePosition();
-                var tilePosition = _tileMap.LocalToMap(localMousePosition);
+            var localMousePosition = GetLocalMousePosition();
+            var tilePosition = _tileMap.LocalToMap(localMousePosition);
 
-                if (_tileCoordMap.TryGetValue(tilePosition, out var value))
-                {
-                    _indicator.Visible = true;
-                    _indicator.Position = tilePosition * TileSize;
-                    _indicator.GetNodeOrNull<Label>("%Position").Text = tilePosition.ToString();
-                    _indicator.GetNodeOrNull<Label>("%Height").Text = value!.Height.ToString(CultureInfo.CurrentCulture);
-                    _indicator.GetNodeOrNull<Label>("%ColorLabel").Text = value!.HeightColor.ToString();
-                    _indicator.GetNodeOrNull<ColorRect>("%ColorRect").Color = value!.HeightColor;
-                }
-                else
-                {
-                    _indicator.Visible = false;
-                }
+            _indicator.Visible = false;
+            if (_tileCoordMap.TryGetValue(tilePosition, out var tile))
+            {
+                _indicator.Visible = true;
+                _indicator.Position = tilePosition * TileSize;
+                _indicator.GetNodeOrNull<Label>("%Position").Text = $"Position: {tilePosition.ToString()}";
+                _indicator.GetNodeOrNull<Label>("%Height").Text = $"Height: {tile!.Height.ToString(CultureInfo.CurrentCulture)}";
+                _indicator.GetNodeOrNull<Label>("%ColorLabel").Text = tile!.HeightColor.ToString();
+                _indicator.GetNodeOrNull<ColorRect>("%ColorRect").Color = tile!.HeightColor;
             }
         }
     }
 
     public override void _Process(double delta)
     {
-        CurrentChunkCoord = GetChunkCoordinate(_position);
-        if (CurrentChunkCoord != LastChunkCoord)
-        {
-            this.Global<Events>().EmitSignal(Events.SignalName.ChunkChanged, LastChunkCoord,
-                CurrentChunkCoord);
-        }
-
-        LastChunkCoord = CurrentChunkCoord;
-
-        if (Input.IsActionPressed("ui_accept"))
+        if (Input.IsActionPressed("regenerate"))
         {
             _position = new Vector2I(Random.Shared.Next(-10, 10), Random.Shared.Next(-10, 10));
             Generate(_position);
+        }
+
+        if (Input.IsActionPressed("switch_tilemap"))
+        {
+            _tileMap.Visible = !_tileMap.Visible;
+        }
+        
+        if (Input.IsActionPressed("switch_heightmap"))
+        {
+            _heightMap.Visible = !_heightMap.Visible;
         }
     }
 
@@ -86,69 +72,76 @@ public partial class SampleScene : Node2D
     {
         GD.Print("------------generate------------");
 
-        var sprite2DOld = GetNodeOrNull<Sprite2D>("sprite2D");
-        if (sprite2DOld != null)
+        //先把生成的高度图删除掉
+        if (_heightMap != null)
         {
-            RemoveChild(sprite2DOld);
+            RemoveChild(_heightMap);
+            _heightMap.Free();
+            _heightMap = null;
         }
 
         _indicator.Visible = false;
         _tileCoordMap.Clear();
-        _height.Seed = Random.Shared.Next();
-        _height.Frequency = 0.01f;
-        _height.NoiseType = FastNoiseLite.NoiseTypeEnum.Perlin;
 
+        //每次重新生成种子
+        _heightNoise.Seed = Random.Shared.Next();
+        _heightNoise.Frequency = 0.01f;
+        _heightNoise.NoiseType = FastNoiseLite.NoiseTypeEnum.Perlin;
+
+        //layer 1：水，0：水下面的沙地
         _tileMap.ClearLayer(1);
 
-        var tileCoordX = tileCoord.X;
-        var tileCoordY = tileCoord.Y;
+        //这是生成地图的中心点
+        var centerCoordX = tileCoord.X;
+        var centerCoordY = tileCoord.Y;
 
-        var cells = new Array<Vector2I>();
+        var waterCells = new Array<Vector2I>();
+        //TODO：下面逻辑是生成高度图的逻辑，实际上FastNoiseLite#GetImage可以直接获得噪声图，那这么来说只要把FastNoiseLite#Offset偏移到指定的位置就可以了，所以这里的逻辑可以优化
         var heightImage = Image.Create(RenderDist * 2 + 1, RenderDist * 2 + 1, false, Image.Format.Rgba8);
-        for (var i = tileCoordX - RenderDist; i <= tileCoordX + RenderDist; i++)
+        for (var i = centerCoordX - RenderDist; i <= centerCoordX + RenderDist; i++)
         {
-            for (var j = tileCoordY - RenderDist; j <= tileCoordY + RenderDist; j++)
+            for (var j = centerCoordY - RenderDist; j <= centerCoordY + RenderDist; j++)
             {
                 var coords = new Vector2I(i, j);
-                var height = _height.GetNoise2D(i, j);
+                var height = _heightNoise.GetNoise2D(i, j);
 
-                if (height > 0.5f || height < -0.5f)
+                //TODO：根据FastNoiseLite文档的说明，噪声的区间是[-1, 1]，但是发现好像是[-0.5, 0.5]，这一步需要确认
+                if (height is > 0.5f or < -0.5f)
                 {
                     GD.Print($"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!height:{height}, coords:{coords}");
                 }
 
+                //小于0，说明是水
                 if (height < 0.0f)
                 {
-                    cells.Add(coords);
+                    waterCells.Add(coords);
                 }
 
-                // cells.Add(coords);
+                //把高度值规范到[0, 1]之间
                 var heightColorValue = 0 + (1 - 0) * ((height - (-0.5f)) / (0.5f - (-0.5f)));
+                //灰度
                 var heightColor = new Color(heightColorValue, heightColorValue, heightColorValue, heightColorValue);
-                _tileCoordMap[coords] = new Tile(coords, height, heightColor);
+                //生成tile元数据
+                _tileCoordMap[coords] = new TileMeta(coords, height, heightColor);
 
-                heightImage.SetPixel(i - tileCoordX + RenderDist, j - tileCoordY + RenderDist, heightColor);
+                //设置颜色
+                heightImage.SetPixel(i - centerCoordX + RenderDist, j - centerCoordY + RenderDist, heightColor);
             }
         }
 
-        GD.Print("------------generate 1------------");
-        _tileMap.SetCellsTerrainConnect(1, cells, 0, 0);
-        GD.Print("------------generate 2-----------");
-
+        //terrain连接！
+        _tileMap.SetCellsTerrainConnect(1, waterCells, 0, 0);
 
         var heightTexture = ImageTexture.CreateFromImage(heightImage);
+        
+        _heightMap = new Sprite2D();
+        _heightMap.Name = "heightMap";
+        _heightMap.Texture = heightTexture;
+        _heightMap.Scale = new Vector2(TileSize, TileSize);
+        _heightMap.Position = tileCoord * TileSize + new Vector2(TileSize / 2.0f, TileSize / 2.0f);
+        _heightMap.Modulate = new Color(Colors.White, 0.3f);
 
-        var sprite2D = new Sprite2D();
-
-        sprite2D.Name = "sprite2D";
-        sprite2D.Texture = heightTexture;
-        sprite2D.Scale = new Vector2(TileSize, TileSize);
-        sprite2D.Position = tileCoord * TileSize + new Vector2(TileSize / 2.0f, TileSize / 2.0f);
-        sprite2D.Modulate = new Color(Colors.White, 0.3f);
-
-        sprite2D.AddToGroup("texture");
-
-        AddChild(sprite2D);
+        AddChild(_heightMap);
 
         var material = _tileMap.Material as ShaderMaterial;
 
@@ -156,6 +149,7 @@ public partial class SampleScene : Node2D
         material.SetShaderParameter("heightTextureGlobalPosition",
             ToGlobal(new Vector2(-RenderDist * TileSize, -RenderDist * TileSize) + new Vector2(TileSize / 2.0f, TileSize / 2.0f) + tileCoord * TileSize));
         material.SetShaderParameter("heightTextureSize", (2.0f * RenderDist + 1) * TileSize);
+        
         GD.Print("------------generate finish------------");
     }
 

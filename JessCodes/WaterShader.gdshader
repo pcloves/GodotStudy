@@ -22,6 +22,5 @@ void fragment()
 	if(abs(COLOR.r - 0.0) < 0.001 && COLOR.a > 0.0)
 	{
 		COLOR = gradientColor;
-		//COLOR.a = alpha;
 	}
 }

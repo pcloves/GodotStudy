@@ -1,10 +1,12 @@
-﻿using Godot;
+﻿using System.Diagnostics.CodeAnalysis;
+using Godot;
 
 namespace GodotStudy.JessCodes;
 
-public class Tile
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
+public class TileMeta
 {
-    public Tile(Vector2I coords, float height, Color heightColor)
+    public TileMeta(Vector2I coords, float height, Color heightColor)
     {
         Coords = coords;
         Height = height;
@@ -13,6 +15,6 @@ public class Tile
 
     public Vector2I Coords { get; private set; }
     public float Height { get; private set; }
-    
+
     public Color HeightColor { get; private set; }
 }
