@@ -16,11 +16,8 @@ void fragment()
 {
 	vec4 heightColor = texture(heightTexture, (globalPosition - heightTextureGlobalPosition) / heightTextureSize);
 	vec4 gradientColor = texture(gradientTexture, vec2(heightColor.a, 0.5));
-	vec4 mainColor = texture(mainTexture, UV);
-	float alpha = mainColor.r * gradientColor.r;
+	vec4 color = texture(TEXTURE, UV);
 	
-	if(abs(COLOR.r - 0.0) < 0.001 && COLOR.a > 0.0)
-	{
-		COLOR = gradientColor;
-	}
+	COLOR = gradientColor;
+	COLOR.a *= color.a;
 }

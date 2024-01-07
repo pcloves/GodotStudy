@@ -8,4 +8,7 @@
   <ItemGroup>
     <Content Include="VisualShader\README.md" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="BetterEnums" Version="1.0.2" />
+  </ItemGroup>
 </Project>

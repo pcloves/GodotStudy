@@ -1,14 +1,17 @@
 using System;
 using System.Globalization;
+using System.Linq;
+using BetterEnumsGen;
 using Godot;
 using Godot.Collections;
+using GodotStudy.Extensions;
 
 namespace GodotStudy.JessCodes;
 
 public partial class SampleScene : Node2D
 {
     public const int TileSize = 16;
-    public const int RenderDist = 20;
+    public const int RenderDist = 60;
 
     [Export] private Vector2I _position = new(0, 0);
 
@@ -51,18 +54,19 @@ public partial class SampleScene : Node2D
 
     public override void _Process(double delta)
     {
-        if (Input.IsActionPressed("regenerate"))
+        if (Input.IsActionJustPressed("regenerate"))
         {
+            GD.Print("regenerate press");
             _position = new Vector2I(Random.Shared.Next(-10, 10), Random.Shared.Next(-10, 10));
             Generate(_position);
         }
 
-        if (Input.IsActionPressed("switch_tilemap"))
+        if (Input.IsActionJustPressed("switch_tilemap"))
         {
             _tileMap.Visible = !_tileMap.Visible;
         }
-        
-        if (Input.IsActionPressed("switch_heightmap"))
+
+        if (Input.IsActionJustPressed("switch_heightmap"))
         {
             _heightMap.Visible = !_heightMap.Visible;
         }
@@ -88,8 +92,7 @@ public partial class SampleScene : Node2D
         _heightNoise.Frequency = 0.01f;
         _heightNoise.NoiseType = FastNoiseLite.NoiseTypeEnum.Perlin;
 
-        //layer 1：水，0：水下面的沙地
-        _tileMap.ClearLayer(1);
+        _tileMap.Clear();
 
         //这是生成地图的中心点
         var centerCoordX = tileCoord.X;
@@ -105,12 +108,6 @@ public partial class SampleScene : Node2D
                 var coords = new Vector2I(i, j);
                 var height = _heightNoise.GetNoise2D(i, j);
 
-                //TODO：根据FastNoiseLite文档的说明，噪声的区间是[-1, 1]，但是发现好像是[-0.5, 0.5]，这一步需要确认
-                if (height is > 0.5f or < -0.5f)
-                {
-                    GD.Print($"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!height:{height}, coords:{coords}");
-                }
-
                 //小于0，说明是水
                 if (height < 0.0f)
                 {
@@ -118,7 +115,7 @@ public partial class SampleScene : Node2D
                 }
 
                 //把高度值规范到[0, 1]之间
-                var heightColorValue = 0 + (1 - 0) * ((height - (-0.5f)) / (0.5f - (-0.5f)));
+                var heightColorValue = (float)Mathf.Remap(height, -0.6, 0.6, 0, 1);
                 //灰度
                 var heightColor = new Color(heightColorValue, heightColorValue, heightColorValue, heightColorValue);
                 //生成tile元数据
@@ -129,11 +126,23 @@ public partial class SampleScene : Node2D
             }
         }
 
-        //terrain连接！
-        _tileMap.SetCellsTerrainConnect(1, waterCells, 0, 0);
+        var max = _tileCoordMap.Values.Select(meta => meta.Height).Max();
+        var min = _tileCoordMap.Values.Select(meta => meta.Height).Min();
 
-        var heightTexture = ImageTexture.CreateFromImage(heightImage);
+        GD.Print($"max:{max}, min:{min}, seed:{_heightNoise.Seed}");
+
+        //terrain连接！
+        var terrainSetWater = Layer.Water.GetAttributeOfType<TerrainAttribute>()!.TerrainSet;
+        var terrainWater = Layer.Water.GetAttributeOfType<TerrainAttribute>()!.Terrain;
+        _tileMap.SetCellsTerrainConnect(Layer.Water.ToInt(), waterCells, terrainSetWater, terrainWater);
+
+        var terrainSetWaterBackground = Layer.WaterBackground.GetAttributeOfType<TerrainAttribute>()!.TerrainSet;
+        var terrainWaterBackground = Layer.WaterBackground.GetAttributeOfType<TerrainAttribute>()!.Terrain;
+        _tileMap.SetCellsTerrainConnect(Layer.WaterBackground.ToInt(), waterCells, terrainSetWaterBackground, terrainWaterBackground);
         
+        
+        var heightTexture = ImageTexture.CreateFromImage(heightImage);
+
         _heightMap = new Sprite2D();
         _heightMap.Name = "heightMap";
         _heightMap.Texture = heightTexture;
@@ -143,13 +152,14 @@ public partial class SampleScene : Node2D
 
         AddChild(_heightMap);
 
-        var material = _tileMap.Material as ShaderMaterial;
+        var tileSet = _tileMap.TileSet;
+        var tileSetSource = (TileSetAtlasSource)tileSet.GetSource(TileSource.Water.ToInt());
 
-        material!.SetShaderParameter("heightTexture", heightTexture);
-        material.SetShaderParameter("heightTextureGlobalPosition",
-            ToGlobal(new Vector2(-RenderDist * TileSize, -RenderDist * TileSize) + new Vector2(TileSize / 2.0f, TileSize / 2.0f) + tileCoord * TileSize));
-        material.SetShaderParameter("heightTextureSize", (2.0f * RenderDist + 1) * TileSize);
-        
+        tileSetSource.SetShaderParameter("heightTexture", heightTexture);
+        tileSetSource.SetShaderParameter("heightTextureGlobalPosition",
+            ToGlobal(new Vector2(-RenderDist * TileSize, -RenderDist * TileSize) + new Vector2(TileSize, TileSize) / 2 + tileCoord * TileSize));
+        tileSetSource.SetShaderParameter("heightTextureSize", (2.0f * RenderDist + 1) * TileSize);
+
         GD.Print("------------generate finish------------");
     }
 
