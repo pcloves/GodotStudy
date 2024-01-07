@@ -11,7 +11,7 @@ namespace GodotStudy.JessCodes;
 public partial class SampleScene : Node2D
 {
     public const int TileSize = 16;
-    public const int RenderDist = 60;
+    public const int RenderDist = 40;
 
     [Export] private Vector2I _position = new(0, 0);
 
@@ -34,7 +34,7 @@ public partial class SampleScene : Node2D
     {
         base._Input(@event);
 
-        if (@event is InputEventMouseButton { Pressed: true })
+        if (@event is InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left })
         {
             var localMousePosition = GetLocalMousePosition();
             var tilePosition = _tileMap.LocalToMap(localMousePosition);
@@ -99,6 +99,7 @@ public partial class SampleScene : Node2D
         var centerCoordY = tileCoord.Y;
 
         var waterCells = new Array<Vector2I>();
+        var sandCells = new Array<Vector2I>();
         //TODO：下面逻辑是生成高度图的逻辑，实际上FastNoiseLite#GetImage可以直接获得噪声图，那这么来说只要把FastNoiseLite#Offset偏移到指定的位置就可以了，所以这里的逻辑可以优化
         var heightImage = Image.Create(RenderDist * 2 + 1, RenderDist * 2 + 1, false, Image.Format.Rgba8);
         for (var i = centerCoordX - RenderDist; i <= centerCoordX + RenderDist; i++)
@@ -108,6 +109,7 @@ public partial class SampleScene : Node2D
                 var coords = new Vector2I(i, j);
                 var height = _heightNoise.GetNoise2D(i, j);
 
+                sandCells.Add(coords);
                 //小于0，说明是水
                 if (height < 0.0f)
                 {
@@ -139,8 +141,11 @@ public partial class SampleScene : Node2D
         var terrainSetWaterBackground = Layer.WaterBackground.GetAttributeOfType<TerrainAttribute>()!.TerrainSet;
         var terrainWaterBackground = Layer.WaterBackground.GetAttributeOfType<TerrainAttribute>()!.Terrain;
         _tileMap.SetCellsTerrainConnect(Layer.WaterBackground.ToInt(), waterCells, terrainSetWaterBackground, terrainWaterBackground);
-        
-        
+
+        var terrainSetSand = Layer.WaterBackground.GetAttributeOfType<TerrainAttribute>()!.TerrainSet;
+        var terrainSand = Layer.WaterBackground.GetAttributeOfType<TerrainAttribute>()!.Terrain;
+        _tileMap.SetCellsTerrainConnect(Layer.Sand.ToInt(), sandCells, terrainSetSand, terrainSand);
+
         var heightTexture = ImageTexture.CreateFromImage(heightImage);
 
         _heightMap = new Sprite2D();
@@ -153,12 +158,18 @@ public partial class SampleScene : Node2D
         AddChild(_heightMap);
 
         var tileSet = _tileMap.TileSet;
-        var tileSetSource = (TileSetAtlasSource)tileSet.GetSource(TileSource.Water.ToInt());
-
-        tileSetSource.SetShaderParameter("heightTexture", heightTexture);
-        tileSetSource.SetShaderParameter("heightTextureGlobalPosition",
+        
+        var tileSetSourceWater = (TileSetAtlasSource)tileSet.GetSource(TileSource.Water.ToInt());
+        tileSetSourceWater.SetShaderParameter("heightTexture", heightTexture);
+        tileSetSourceWater.SetShaderParameter("heightTextureGlobalPosition",
             ToGlobal(new Vector2(-RenderDist * TileSize, -RenderDist * TileSize) + new Vector2(TileSize, TileSize) / 2 + tileCoord * TileSize));
-        tileSetSource.SetShaderParameter("heightTextureSize", (2.0f * RenderDist + 1) * TileSize);
+        tileSetSourceWater.SetShaderParameter("heightTextureSize", (2.0f * RenderDist + 1) * TileSize);
+
+        var tileSetSourceWaterBackground = (TileSetAtlasSource)tileSet.GetSource(TileSource.WaterBackground.ToInt());
+        tileSetSourceWaterBackground.SetShaderParameter("heightTexture", heightTexture);
+        tileSetSourceWaterBackground.SetShaderParameter("heightTextureGlobalPosition",
+            ToGlobal(new Vector2(-RenderDist * TileSize, -RenderDist * TileSize) + new Vector2(TileSize, TileSize) / 2 + tileCoord * TileSize));
+        tileSetSourceWaterBackground.SetShaderParameter("heightTextureSize", (2.0f * RenderDist + 1) * TileSize);
 
         GD.Print("------------generate finish------------");
     }
