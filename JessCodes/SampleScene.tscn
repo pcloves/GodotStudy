@@ -882,6 +882,7 @@ color = Color(0.823529, 0.643137, 0.470588, 1)
 
 [node name="TileMap" type="TileMap" parent="Environment"]
 unique_name_in_owner = true
+material = ExtResource("2_be4a3")
 tile_set = SubResource("TileSet_kd7di")
 format = 2
 layer_0/name = "Sand"
@@ -907,9 +908,13 @@ texture = ExtResource("8_ubi8k")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Label" type="Label" parent="CanvasLayer"]
+[node name="Panel" type="Panel" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Panel"]
 offset_right = 168.0
-offset_bottom = 75.0
+offset_bottom = 101.0
 text = "T: Switch TileMap
 H: Switch HeightMap
 R: Regenerate

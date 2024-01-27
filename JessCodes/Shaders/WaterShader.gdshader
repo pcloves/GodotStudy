@@ -17,7 +17,7 @@ uniform float causticSpeed = 1.0;
 uniform float causticMovementAmount = 0.15f;
 uniform float causticFaderMultiplier = 1.45f;
 
-uniform vec4 specularColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+uniform vec4 specularColor : source_color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 uniform sampler2D specularNoiseTexture : hint_default_white, repeat_enable;
 uniform sampler2D specularMovementLeftNoiseTexture : hint_default_white, repeat_enable;
 uniform sampler2D specularMovementRightNoiseTexture : hint_default_white, repeat_enable;
@@ -25,7 +25,7 @@ uniform float specularThreshold = 0.35f;
 uniform float specularSpeed = 0.025f;
 uniform float specularScale = 15.0f;
 
-uniform vec4 foamColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+uniform vec4 foamColor : source_color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 uniform sampler2D foamTexture : hint_default_white, repeat_enable;
 uniform float foamIntensity = 0.2f;
 uniform float foamScale = 15.0f;
@@ -129,9 +129,9 @@ void fragment()
 	vec4 waterWithCausticAndSpecularAndFoamLayer = mix(waterWithCausticAndSpecularLayer, finalFoam, finalFoam.a);
 	
 	
-	
 	vec4 blendColor = mix(gradientColor, finalCaustics, finalCaustics.a);
 	
-	COLOR = finalSpecular;
+	
+	COLOR = blendColor;
 }
 
