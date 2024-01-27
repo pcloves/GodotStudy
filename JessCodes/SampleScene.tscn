@@ -913,6 +913,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Label" type="Label" parent="CanvasLayer/Panel"]
+layout_mode = 0
 offset_right = 168.0
 offset_bottom = 101.0
 text = "T: Switch TileMap
