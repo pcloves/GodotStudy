@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cpnnjbkhf18va"]
+
+[ext_resource type="Script" path="res://niceeffort1/main/Main.cs" id="1_sgyhe"]
+[ext_resource type="PackedScene" uid="uid://qy4trqrvdn3o" path="res://niceeffort1/boid_particles/boid_particles.tscn" id="2_yoywt"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_sgyhe")
+
+[node name="BoidParticles" parent="." instance=ExtResource("2_yoywt")]
+unique_name_in_owner = true
