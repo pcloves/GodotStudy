@@ -1,0 +1,50 @@
+[gd_scene load_steps=2 format=3 uid="uid://d0xvcbt8ptbeb"]
+
+[ext_resource type="Script" path="res://JACKADUX/InputEventStudy.gd" id="1_32lkg"]
+
+[node name="Root" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_32lkg")
+
+[node name="P1-White" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 400.0
+mouse_filter = 1
+color = Color(1, 1, 1, 0.658824)
+script = ExtResource("1_32lkg")
+
+[node name="P2-Red" type="ColorRect" parent="P1-White"]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 200.0
+offset_right = 600.0
+offset_bottom = 600.0
+mouse_filter = 1
+color = Color(1, 0, 0, 0.666667)
+script = ExtResource("1_32lkg")
+
+[node name="P3-Green" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 300.0
+offset_top = 92.925
+offset_right = 700.0
+offset_bottom = 492.924
+mouse_filter = 1
+color = Color(0.392157, 1, 0.34902, 0.643137)
+script = ExtResource("1_32lkg")
+
+[node name="P4-Blue" type="ColorRect" parent="P3-Green"]
+layout_mode = 0
+offset_left = -141.86
+offset_top = -80.195
+offset_right = 158.14
+offset_bottom = 219.805
+mouse_filter = 1
+color = Color(0.239216, 0.443137, 1, 0.717647)
+script = ExtResource("1_32lkg")
