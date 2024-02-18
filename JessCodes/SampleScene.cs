@@ -14,8 +14,8 @@ public partial class SampleScene : Node2D
     public const int RenderDist = 30;
 
     [Export] private Vector2I _position = new(0, 0);
-
-    private FastNoiseLite _heightNoise = new();
+    [Export] private FastNoiseLite _heightNoise = new();
+    
     private TileMap _tileMap;
     private Sprite2D _heightMap;
     private Node2D _indicator;
@@ -89,8 +89,6 @@ public partial class SampleScene : Node2D
 
         //每次重新生成种子
         _heightNoise.Seed = Random.Shared.Next();
-        _heightNoise.Frequency = 0.01f;
-        _heightNoise.NoiseType = FastNoiseLite.NoiseTypeEnum.Perlin;
 
         _tileMap.Clear();
 
@@ -122,7 +120,7 @@ public partial class SampleScene : Node2D
                     case < 0.0f:
                         waterCells.Add(coords);
                         break;
-                    case >= 0.05f:
+                    case >= 0.05f and <= 0.2f:
                         grassCells.Add(coords);
                         break;
                 }
