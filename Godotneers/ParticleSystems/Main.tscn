@@ -1,0 +1,65 @@
+[gd_scene load_steps=6 format=3 uid="uid://dw6nx6kldasq2"]
+
+[ext_resource type="PackedScene" uid="uid://c2omty50ggut8" path="res://Godotneers/ParticleSystems/portal/Portal.tscn" id="1_5da78"]
+[ext_resource type="Texture2D" uid="uid://dlhqrdv1cy8g6" path="res://Godotneers/ParticleSystems/particles/drop.svg" id="2_12up1"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0nbx4"]
+lifetime_randomness = 0.5
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(960, 1, 1)
+angle_min = 15.0
+angle_max = 15.0
+direction = Vector3(0.3, 1, 0)
+spread = 0.0
+initial_velocity_min = 25.0
+initial_velocity_max = 25.0
+gravity = Vector3(0, 98, 0)
+scale_min = 0.4
+scale_max = 0.6
+collision_mode = 2
+sub_emitter_mode = 3
+sub_emitter_amount_at_collision = 4
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_4jx3e"]
+polygon = PackedVector2Array(-441, 642, 1504, 640, 1502, 755, -447, 752)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lj8g4"]
+particle_flag_align_y = true
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 30.0
+initial_velocity_min = 50.0
+initial_velocity_max = 60.0
+gravity = Vector3(0, 98, 0)
+scale_min = 0.1
+scale_max = 0.3
+
+[node name="Main" type="Node2D"]
+
+[node name="Portal" parent="." instance=ExtResource("1_5da78")]
+position = Vector2(358, 265)
+
+[node name="Portal2" parent="." instance=ExtResource("1_5da78")]
+position = Vector2(742, 271)
+
+[node name="Rain Particles" type="GPUParticles2D" parent="."]
+self_modulate = Color(1, 1, 1, 0.470588)
+position = Vector2(576, -100)
+amount = 800
+sub_emitter = NodePath("../Rain Splash Particles")
+process_material = SubResource("ParticleProcessMaterial_0nbx4")
+texture = ExtResource("2_12up1")
+lifetime = 4.0
+visibility_rect = Rect2(-1000, 0, 1800, 900)
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_4jx3e")
+
+[node name="Rain Splash Particles" type="GPUParticles2D" parent="."]
+self_modulate = Color(1, 1, 1, 0.470588)
+amount = 6400
+process_material = SubResource("ParticleProcessMaterial_lj8g4")
+texture = ExtResource("2_12up1")
+explosiveness = 1.0
+visibility_rect = Rect2(-1000, 0, 1800, 900)
