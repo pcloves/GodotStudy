@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://d0xvcbt8ptbeb"]
 
-[ext_resource type="Script" path="res://JACKADUX/InputEventStudy/InputEventStudy.gd" id="1_32lkg"]
+[ext_resource type="Script" uid="uid://y3h713125fdo" path="res://JACKADUX/InputEventStudy/InputEventStudy.gd" id="1_32lkg"]
 
 [node name="Root" type="Control"]
 layout_mode = 3

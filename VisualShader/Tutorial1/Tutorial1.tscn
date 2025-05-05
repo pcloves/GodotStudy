@@ -2,7 +2,7 @@
 
 [ext_resource type="Shader" uid="uid://bfrj4enj5kinu" path="res://VisualShader/Tutorial1/Tutorial1.tres" id="1_gl23l"]
 [ext_resource type="Texture2D" uid="uid://x3k12agv5phk" path="res://icon.svg" id="1_r50b8"]
-[ext_resource type="Script" path="res://VisualShader/Tutorial1/Tutorial1.cs" id="1_y8vpp"]
+[ext_resource type="Script" uid="uid://bq1u2qs74e67n" path="res://VisualShader/Tutorial1/Tutorial1.cs" id="1_y8vpp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_84mcf"]
 shader = ExtResource("1_gl23l")

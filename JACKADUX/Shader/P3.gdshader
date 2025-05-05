@@ -12,14 +12,14 @@ float ramp(float input, float in_start, float in_end, float out_start, float out
 }
 
 void fragment() {
-	
-	//圆心	
+
+	//圆心
 	vec2 center = vec2(0.5, 0.5);
 	//任意点到圆心的向量
 	vec2 vn = UV - center;
 	//任意点到圆心的半径
 	float radius = length(vn);
-	
+
 	//圆环=========================================================
 	//内圆
 	float inner = smoothstep(inner_radius, inner_radius + 0.005, radius);
@@ -27,7 +27,7 @@ void fragment() {
 	float outer = smoothstep(outer_radius, outer_radius + 0.005, radius);
 	//布尔运算，得到圆环：内圆 - 外圆
 	//COLOR.a *= abs(inner - outer);
-	
+
 
 	//颜色渐变=========================================================
 	//圆环起始向量的角度
@@ -51,9 +51,9 @@ void fragment() {
 	theta *= sign(n.z);
 	//将弧度从[-PI, PI]映射到[0, 1]
 	theta = ramp(theta, -PI, PI, 0., 1.);
-	
+
 	//COLOR.rgb *= vec3(theta);
-	
+
 	//圆环开口=========================================================
 	float inner_start = 0.1;
 	float outer_start = 0.9;
@@ -61,12 +61,12 @@ void fragment() {
 	float inner_theta = smoothstep(inner_start, inner_start + 0.001, theta);
 	//布尔运算思想!!
 	//COLOR.a *= inner_theta - outer_theta;
-	
-	
+
+
 	//重复分段=========================================================
 	int count = 500;
 	float mul = theta * float(count);
 	mul = mul - floor(mul);
-	
+
 	COLOR.a = mul;
 }

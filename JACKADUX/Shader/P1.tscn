@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://38ty4qb108a"]
 
-[ext_resource type="Shader" path="res://JACKADUX/Shader/P1.gdshader" id="1_nei0b"]
+[ext_resource type="Shader" uid="uid://1hih75o881v" path="res://JACKADUX/Shader/P1.gdshader" id="1_nei0b"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mbfb4"]
 shader = ExtResource("1_nei0b")

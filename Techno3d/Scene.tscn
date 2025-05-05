@@ -2,7 +2,7 @@
 
 [ext_resource type="Material" uid="uid://de1md1xb02ose" path="res://Techno3d/TileSet.material" id="1_4s2kx"]
 [ext_resource type="Texture2D" uid="uid://ctyspi1nybjke" path="res://Techno3d/Dungeon Tile Set.png" id="1_74x8n"]
-[ext_resource type="Script" path="res://Techno3d/TileMap.cs" id="3_2idns"]
+[ext_resource type="Script" uid="uid://c5mitifgh8jv1" path="res://Techno3d/TileMap.cs" id="3_2idns"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e0cuu"]
 texture = ExtResource("1_74x8n")

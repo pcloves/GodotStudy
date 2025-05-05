@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://2h0jortikdgp"]
 
-[ext_resource type="Script" path="res://VisualShader/Tutorial2/Tutorial2.cs" id="1_fyy4g"]
+[ext_resource type="Script" uid="uid://co8aku24t5jnr" path="res://VisualShader/Tutorial2/Tutorial2.cs" id="1_fyy4g"]
 [ext_resource type="Shader" uid="uid://dj7ysrqcyhg0k" path="res://VisualShader/Tutorial2/Tutorial2.tres" id="2_jo1ns"]
 [ext_resource type="Texture2D" uid="uid://dbbne0l2hifrs" path="res://icon.png" id="3_y1jyv"]
 
